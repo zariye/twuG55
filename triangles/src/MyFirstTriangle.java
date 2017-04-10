@@ -9,9 +9,16 @@ public class MyFirstTriangle {
         printVerticalLine(3);
         System.out.println("Print triangle line");
         printTriangle(3);
-        System.out.println("Print iso triangle line");
+        System.out.println("Print iso triangle");
         printIsoTriangle(3);
-    }
+        System.out.println("Print diamond");
+        printDiamond(4);
+        System.out.println("Print name diamond");
+        printDiamondName(4, "Zara");
+        System.out.println("Print fizzbuzz");
+        printFizzBuzz();
+
+  }
 
     private static void printHorizontalLine(int spaces, int number) {
         int x = number;
@@ -61,5 +68,62 @@ public class MyFirstTriangle {
         }
     }
 
+    private static void printDiamond(int lines) {
+        int l = lines;
+        int count = 1;
 
+        while(l > 0) {
+            printHorizontalLine(l - 1, count);
+            l--;
+            count += 2;
+        }
+        count -= 2;
+        while(l < lines - 1) {
+            l++;
+            count -= 2;
+            printHorizontalLine(l, count);
+        }
+    }
+
+    private static void printDiamondName(int lines, String name) {
+        int l = lines;
+        int count = 1;
+
+        while(l > 1) {
+            printHorizontalLine(l - 1, count);
+            l--;
+            count += 2;
+        }
+
+        System.out.println(name);
+
+        l = 0;
+        while(l < lines - 1) {
+            l++;
+            count -= 2;
+            printHorizontalLine(l, count);
+        }
+    }
+
+    private static void printFizzBuzz() {
+      String fizzBuzz;
+
+      for (int i = 1; i <= 100; i++) {
+        fizzBuzz = "";
+
+        if ((i % 3) == 0) {
+          fizzBuzz ="Fizz";
+        }
+
+        if ((i % 5) == 0) {
+          fizzBuzz += "Buzz";
+        }
+
+        if (fizzBuzz.isEmpty()) {
+          System.out.println(i);
+        } else {
+          System.out.println(fizzBuzz);
+        }
+      }
+    }
 }
