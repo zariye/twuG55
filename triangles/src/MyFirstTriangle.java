@@ -3,6 +3,14 @@
  */
 public class MyFirstTriangle {
     public static void main(String[]  args) {
-        System.out.print("*");
+        printHorizontalLine (8);
+    }
+
+    static void printHorizontalLine(int number) {
+        int x = number;
+        while (x > 0) {
+            System.out.print("*");
+            x -= 1;
+        }
     }
 }
