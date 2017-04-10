@@ -17,6 +17,8 @@ public class MyFirstTriangle {
         printDiamondName(4, "Zara");
         System.out.println("Print fizzbuzz");
         printFizzBuzz();
+        System.out.println("lalalala");
+        printPrimeNumbers(30);
 
   }
 
@@ -125,5 +127,22 @@ public class MyFirstTriangle {
           System.out.println(fizzBuzz);
         }
       }
+    }
+
+    private static boolean isPrime(int number) {
+        for(int i=2; i < number; i++ ) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void printPrimeNumbers(int number) {
+        for(int i=0; i < number; i++) {
+           if (isPrime(i)) {
+               System.out.println(i);
+           }
+        }
     }
 }
