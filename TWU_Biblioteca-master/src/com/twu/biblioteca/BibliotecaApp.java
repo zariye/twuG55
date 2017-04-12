@@ -17,9 +17,7 @@ public class BibliotecaApp {
 
     public void start() {
         greetUser();
-        menu.drawMenu();
-        int result = menu.readInput();
-        this.executeCommand(result);
+        this.callMenu();
     }
 
     public void greetUser() {
@@ -45,13 +43,25 @@ public class BibliotecaApp {
 
     public void executeCommand(int command) {
         switch(command) {
+            case 0 : {
+                System.exit(0);
+                break;
+            }
             case 1: {
                 this.listBooks();
                 break;
             }
             default: {
                 System.out.println("Select a valid option!");
+                this.callMenu();
+
             }
         }
+    }
+
+    private void callMenu() {
+        menu.drawMenu();
+        int result = menu.readInput();
+        this.executeCommand(result);
     }
 }

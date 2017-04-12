@@ -2,7 +2,9 @@ package com.twu.biblioteca;
 
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -48,22 +50,26 @@ public class ExampleTest {
     }
 
     @Test
-    public void testExecuteCommand() {
-
-        int command = 1337;
-        app.executeCommand(command);
-        assertEquals("Select a valid option!\n", out.toString());
-
-
-
-    }
-
-    @Test
     public void testListBooksCommand() {
         int command = 1;
         app.executeCommand(command);
         assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
 
     }
+
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
+
+    @Test
+    public void testQuitCommand() {
+        int command = 0;
+        exit.expectSystemExit();
+        app.executeCommand(command);
+
+    }
+
+
+
 
 }
