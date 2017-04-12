@@ -9,7 +9,6 @@ import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 import java.io.*;
 import java.util.List;
-import java.util.Scanner;
 
 import static org.junit.Assert.*;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
@@ -101,9 +100,7 @@ public class BibliotecaAppTest {
 
     @Test
     public void testUnsuccessfullCheckoutBookCommand() {
-        systemInMock.provideLines("100", "0");
-        Book rmBook = app.getBooks().get(1);
-
+        systemInMock.provideLines("100");
         int command = 2;
         app.executeCommand(command);
 
@@ -121,12 +118,25 @@ public class BibliotecaAppTest {
 
     @Test
     public void testReturnBookCommand() {
-        systemInMock.provideLines("batman");
-
+        systemInMock.provideLines("Head First Java");
         int command = 3;
         app.executeCommand(command);
 
         assertEquals(out.toString(), "Thank you for returning the book.\n");
+    }
+
+    @Test
+    public void testUnsuccesfullReturn() {
+        assertNull(Book.getBookByName("batman", app.getAllBooks()));
+    }
+
+    @Test
+    public void testUnsuccesfullReturnCommand() {
+        systemInMock.provideLines("batman");
+        int command = 3;
+        app.executeCommand(command);
+
+        assertEquals(out.toString(), "That is not a valid book to return.\n");
     }
 
 

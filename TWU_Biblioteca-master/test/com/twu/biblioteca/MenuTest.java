@@ -28,7 +28,7 @@ public class MenuTest {
   public void testDrawMenu() {
     menu.drawMenu();
 
-    assertEquals("[0] quit\n[1] list books\n[2] checkout\n", out.toString());
+    assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n", out.toString());
   }
 
   @Test

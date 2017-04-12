@@ -1,17 +1,19 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class BibliotecaApp {
 
     private Menu menu;
 
-    private List<Book> booksList;
+    private List<Book> allBooks;
+    private List<Book> stockBooks;
 
-    public BibliotecaApp() {
-        booksList = createBooksList();
+    BibliotecaApp() {
+        allBooks = Book.createBooksList();
+        stockBooks = Book.createBooksList();
         menu = new Menu();
     }
 
@@ -19,29 +21,20 @@ public class BibliotecaApp {
         new BibliotecaApp().start();
     }
 
-    public void start() {
+    private void start() {
         greetUser();
         this.callMenu();
     }
 
-    public void greetUser() {
+    void greetUser() {
         System.out.println("Hello user welcome to the Bibliotheka App");
     }
 
-    protected List<Book> getBooks() {
-
-        return booksList;
+    List<Book> getBooks() {
+        return stockBooks;
     }
 
-    private List<Book> createBooksList() {
-        List<Book> booksList = new ArrayList<Book>();
-        booksList.add(new Book("Head First Java", "1940", "Moritz"));
-        booksList.add(new Book("Test Driven Development", "1901", "Jonathan"));
-        booksList.add(new Book("History of the Awesome Kraut", "1200","Zara"));
-        return booksList;
-    }
-
-    public void listBooks() {
+    void listBooks() {
         List<Book> books = this.getBooks();
         for(Book book : books) {
             System.out.println("[" + books.indexOf(book) + "] " + book.getName() + " | " + book.getDate() + " | " + book.getAuthor());
@@ -49,7 +42,7 @@ public class BibliotecaApp {
         }
     }
 
-    public void executeCommand(int command) {
+    void executeCommand(int command) {
         switch(command) {
             case 0 : {
                 System.exit(0);
@@ -67,15 +60,15 @@ public class BibliotecaApp {
                 break;
             }
             case 3 : {
-                String bookName = readBookName();
-                returnBook(new Book(bookName,"",""));
-                System.out.println("Thank you for returning the book.");
-                this.callMenu();
+                if (returnBook(Book.getBookByName(readBookName(), allBooks))) {
+                    System.out.println("Thank you for returning the book.");
+                } else {
+                    System.out.println("That is not a valid book to return.");
+                }
                 break;
             }
             default: {
                 System.out.println("Select a valid option!");
-                this.callMenu();
 
             }
         }
@@ -91,9 +84,10 @@ public class BibliotecaApp {
         menu.drawMenu();
         int result = menu.readInput();
         this.executeCommand(result);
+        this.callMenu();
     }
 
-    public void deleteBook(int bookIndex) {
+    void deleteBook(int bookIndex) {
         if(getBooks().size() > bookIndex) {
             getBooks().remove(bookIndex);
         } else {
@@ -101,14 +95,20 @@ public class BibliotecaApp {
         }
     }
 
-    public void returnBook(Book book) {
-        booksList.add(book);
-
+    boolean returnBook(Book book) {
+        if (book != null) {
+            stockBooks.add(book);
+            return true;
+        }
+        return false;
     }
 
-    public String readBookName() {
+    private String readBookName() {
         Scanner scanner = new Scanner(System.in);
-        String bookName = scanner.nextLine();
-        return bookName;
+        return scanner.nextLine();
+    }
+
+    List<Book> getAllBooks() {
+        return allBooks;
     }
 }
