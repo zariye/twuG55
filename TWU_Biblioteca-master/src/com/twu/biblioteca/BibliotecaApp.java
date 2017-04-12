@@ -5,12 +5,19 @@ import java.util.List;
 
 public class BibliotecaApp {
 
+    private Menu menu;
+
+    public BibliotecaApp() {
+        menu = new Menu();
+    }
+
     public static void main(String[] args) {
         new BibliotecaApp().start();
     }
 
     private void start() {
         greetUser();
+        menu.drawMenu();
     }
 
     private void greetUser() {

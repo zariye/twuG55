@@ -45,8 +45,8 @@ public class ExampleTest {
     @Test
     public void testListBooks() {
         app.listBooks();
-        assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
 
+        assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
     }
 
 
