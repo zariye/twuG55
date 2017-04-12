@@ -12,7 +12,7 @@ public class Menu {
   private List<String> menuItems;
 
   public Menu() {
-    menuItems = Arrays.asList("[0] quit", "[1] list books");
+    menuItems = Arrays.asList("[0] quit", "[1] list books", "[2] checkout");
   }
 
   public void drawMenu() {

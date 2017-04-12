@@ -6,10 +6,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
@@ -46,14 +45,19 @@ public class BibliotecaAppTest {
     public void testListBooks() {
         app.listBooks();
 
-        assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
+        assertEquals("[0] Head First Java | 1940 | Moritz\n" +
+            "[1] Test Driven Development | 1901 | Jonathan\n" +
+            "[2] History of the Awesome Kraut | 1200 | Zara\n", out.toString());
     }
 
     @Test
     public void testListBooksCommand() {
         int command = 1;
         app.executeCommand(command);
-        assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
+
+        assertEquals("[0] Head First Java | 1940 | Moritz\n" +
+            "[1] Test Driven Development | 1901 | Jonathan\n" +
+            "[2] History of the Awesome Kraut | 1200 | Zara\n", out.toString());
 
     }
 
@@ -66,9 +70,29 @@ public class BibliotecaAppTest {
         int command = 0;
         exit.expectSystemExit();
         app.executeCommand(command);
-
     }
 
+
+    @Test
+    public void testCheckoutBook() {
+        List<Book> books = app.getBooks();
+        Book rmBook = books.get(1);
+        app.deleteBook(1);
+        assertFalse(app.getBooks().contains(rmBook));
+    }
+
+    @Test
+    public void testCheckoutBookCommand() {
+        InputStream in = new ByteArrayInputStream("1".getBytes());
+        System.setIn(in);
+        Book rmBook = app.getBooks().get(1);
+
+        int command = 2;
+        app.executeCommand(command);
+
+        assertTrue(out.toString().contains("Please choose you book while writing the index:\n"));
+        assertFalse(app.getBooks().contains(rmBook));
+    }
 
 
 
