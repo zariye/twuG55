@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.Assert.*;
+import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
 public class BibliotecaAppTest {
 
@@ -81,17 +83,31 @@ public class BibliotecaAppTest {
         assertFalse(app.getBooks().contains(rmBook));
     }
 
+    @Rule
+    public final TextFromStandardInputStream systemInMock = emptyStandardInputStream();
+
     @Test
     public void testCheckoutBookCommand() {
-        InputStream in = new ByteArrayInputStream("1".getBytes());
-        System.setIn(in);
-        Book rmBook = app.getBooks().get(1);
+        systemInMock.provideLines("2", "0");
+        Book rmBook = app.getBooks().get(2);
 
         int command = 2;
         app.executeCommand(command);
 
         assertTrue(out.toString().contains("Please choose you book while writing the index:\n"));
         assertFalse(app.getBooks().contains(rmBook));
+        assertTrue(out.toString().contains("Thank you! Enjoy the book\n"));
+    }
+
+    @Test
+    public void testUnsuccessfullCheckoutBookCommand() {
+        systemInMock.provideLines("100", "0");
+        Book rmBook = app.getBooks().get(1);
+
+        int command = 2;
+        app.executeCommand(command);
+
+        assertTrue(out.toString().contains("That book is not available."));
     }
 
 

@@ -63,6 +63,7 @@ public class BibliotecaApp {
                 System.out.println("Please choose you book while writing the index:");
                 listBooks();
                 deleteBook(readBookIndex());
+                System.out.println("Thank you! Enjoy the book");
                 break;
             }
             default: {
@@ -86,6 +87,10 @@ public class BibliotecaApp {
     }
 
     public void deleteBook(int bookIndex) {
-        getBooks().remove(bookIndex);
+        if(getBooks().size() > bookIndex) {
+            getBooks().remove(bookIndex);
+        } else {
+            System.out.println("That book is not available.");
+        }
     }
 }
