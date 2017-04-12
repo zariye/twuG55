@@ -15,12 +15,14 @@ public class BibliotecaApp {
         new BibliotecaApp().start();
     }
 
-    private void start() {
+    public void start() {
         greetUser();
         menu.drawMenu();
+        int result = menu.readInput();
+        this.executeCommand(result);
     }
 
-    private void greetUser() {
+    public void greetUser() {
         System.out.println("Hello user welcome to the Bibliotheka App");
     }
 
@@ -38,6 +40,18 @@ public class BibliotecaApp {
         for(Book book : books) {
             System.out.println(book.getName() + " | " + book.getDate() + " | " + book.getAuthor());
 
+        }
+    }
+
+    public void executeCommand(int command) {
+        switch(command) {
+            case 1: {
+                this.listBooks();
+                break;
+            }
+            default: {
+                System.out.println("Select a valid option!");
+            }
         }
     }
 }

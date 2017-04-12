@@ -9,9 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class ExampleTest {
 
@@ -28,8 +26,8 @@ public class ExampleTest {
 
     @Test
     public void testGreeting() {
-        BibliotecaApp.main(new String[] {});
-        assertEquals("Hello user welcome to the Bibliotheka App\n", out.toString());
+        app.greetUser();
+        assertTrue(out.toString().contains("Hello user welcome to the Bibliotheka App\n"));
     }
 
     @Test
@@ -49,5 +47,23 @@ public class ExampleTest {
         assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
     }
 
+    @Test
+    public void testExecuteCommand() {
+
+        int command = 1337;
+        app.executeCommand(command);
+        assertEquals("Select a valid option!\n", out.toString());
+
+
+
+    }
+
+    @Test
+    public void testListBooksCommand() {
+        int command = 1;
+        app.executeCommand(command);
+        assertEquals("Head First Java | 1940 | Moritz\nTest Driven Development | 1901 | Jonathan\nHistory of the Awesome Kraut | 1200 | Zara\n", out.toString());
+
+    }
 
 }

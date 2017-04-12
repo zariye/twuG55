@@ -3,9 +3,7 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,7 +28,21 @@ public class MenuTest {
   public void testDrawMenu() {
     menu.drawMenu();
 
-    assertEquals("list books\n", out.toString());
+    assertEquals("[1] list books\n", out.toString());
   }
+
+  @Test
+  public void testInput() {
+    InputStream in = new ByteArrayInputStream("1".getBytes());
+    System.setIn(in);
+
+    int result = menu.readInput();
+    assertEquals(1, result);
+  }
+
+
+
+
+
 
 }
