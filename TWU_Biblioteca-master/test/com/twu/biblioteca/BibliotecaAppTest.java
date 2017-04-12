@@ -110,6 +110,24 @@ public class BibliotecaAppTest {
         assertTrue(out.toString().contains("That book is not available."));
     }
 
+    @Test
+    public void testReturnBook() {
+        Book book = new Book("batman","1789", "bruce");
+        app.returnBook(book);
+        List<Book> books = app.getBooks();
+
+        assertTrue(books.contains(book));
+    }
+
+    @Test
+    public void testReturnBookCommand() {
+        systemInMock.provideLines("batman");
+
+        int command = 3;
+        app.executeCommand(command);
+
+        assertEquals(out.toString(), "Thank you for returning the book.\n");
+    }
 
 
 }

@@ -66,6 +66,13 @@ public class BibliotecaApp {
                 System.out.println("Thank you! Enjoy the book");
                 break;
             }
+            case 3 : {
+                String bookName = readBookName();
+                returnBook(new Book(bookName,"",""));
+                System.out.println("Thank you for returning the book.");
+                this.callMenu();
+                break;
+            }
             default: {
                 System.out.println("Select a valid option!");
                 this.callMenu();
@@ -92,5 +99,16 @@ public class BibliotecaApp {
         } else {
             System.out.println("That book is not available.");
         }
+    }
+
+    public void returnBook(Book book) {
+        booksList.add(book);
+
+    }
+
+    public String readBookName() {
+        Scanner scanner = new Scanner(System.in);
+        String bookName = scanner.nextLine();
+        return bookName;
     }
 }
