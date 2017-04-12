@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ExampleTest {
+public class BibliotecaAppTest {
 
     private OutputStream out;
     private BibliotecaApp app;

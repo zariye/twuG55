@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -13,11 +12,13 @@ public class Menu {
   private List<String> menuItems;
 
   public Menu() {
-    menuItems = Arrays.asList("[1] list books");
+    menuItems = Arrays.asList("[0] quit", "[1] list books");
   }
 
   public void drawMenu() {
-    System.out.println(menuItems.get(0));
+    for (String item : menuItems) {
+      System.out.println(item);
+    }
   }
 
   public int readInput() {
