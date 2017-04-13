@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.books.Book;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,23 +28,22 @@ public class BibliotecaApp {
         this.callMenu();
     }
 
-    void greetUser() {
-        System.out.println("Hello user welcome to the Bibliotheka App");
+    public void greetUser() {
+        System.out.println("Hello user, welcome to the Bibliotheka App");
     }
 
-    List<Book> getBooks() {
+    public List<Book> getBooks() {
         return stockBooks;
     }
 
-    void listBooks() {
+    public void listBooks() {
         List<Book> books = this.getBooks();
         for(Book book : books) {
             System.out.println("[" + books.indexOf(book) + "] " + book.getName() + " | " + book.getDate() + " | " + book.getAuthor());
-
         }
     }
 
-    void executeCommand(int command) {
+    public void executeCommand(int command) {
         switch(command) {
             case 0 : {
                 System.exit(0);

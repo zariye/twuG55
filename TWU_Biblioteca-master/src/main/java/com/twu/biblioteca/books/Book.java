@@ -1,4 +1,4 @@
-package com.twu.biblioteca;
+package com.twu.biblioteca.books;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,21 +12,21 @@ public class Book {
     private String date;
     private String author;
 
-    Book(String name, String date, String author) {
+    public Book(String name, String date, String author) {
         this.name = name;
         this.date = date;
         this.author = author;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getDate() {
+    public String getDate() {
         return date;
     }
 
-    String getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
@@ -40,7 +40,7 @@ public class Book {
               && this.getAuthor().equals(newBook.getAuthor());
     }
 
-    static Book getBookByName(String batman, List<Book> bookList) {
+    public static Book getBookByName(String batman, List<Book> bookList) {
         for(Book book : bookList) {
             if (book.getName().equals(batman)) {
                 return book;
@@ -50,7 +50,7 @@ public class Book {
         return null;
     }
 
-    static List<Book> createBooksList() {
+    public static List<Book> createBooksList() {
         List<Book> booksList = new ArrayList<Book>();
         booksList.add(new Book("Head First Java", "1940", "Moritz"));
         booksList.add(new Book("Test Driven Development", "1901", "Jonathan"));
