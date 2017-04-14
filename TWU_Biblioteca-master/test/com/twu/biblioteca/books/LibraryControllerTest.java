@@ -10,10 +10,10 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by buzzer on 13.04.17.
@@ -23,7 +23,7 @@ public class LibraryControllerTest {
     LibraryController libraryController;
 
     @Mock
-    LibraryViewInterface libraryView;
+    LibraryView libraryView;
 
     @Before
     public void setup() {
@@ -33,10 +33,10 @@ public class LibraryControllerTest {
     @Test
     public void testGetMenuItems() {
         List<String> menuItems = libraryController.getMenuItems();
-        assertThat(menuItems, CoreMatchers.hasItem("[0] quit"));
-        assertThat(menuItems, CoreMatchers.hasItem("[1] list books"));
-        assertThat(menuItems, CoreMatchers.hasItem("[2] checkout"));
-        assertThat(menuItems, CoreMatchers.hasItem("[3] return book"));
+        assertThat(menuItems, hasItem("[0] quit"));
+        assertThat(menuItems, hasItem("[1] list books"));
+        assertThat(menuItems, hasItem("[2] checkout"));
+        assertThat(menuItems, hasItem("[3] return book"));
     }
 
     @Rule
@@ -46,9 +46,114 @@ public class LibraryControllerTest {
     public void testListBooksCommand() {
         int command = 1;
         libraryController.executeCommand(command);
-        verify(libraryView).listBooks(new BookService().getAvailableBooks());
+        verify(libraryView).listBooks(libraryController.getAvailableBooks());
     }
 
+    @Test
+    public void testGetAvailableBooks() {
+        List<Book> availableBooks = libraryController.getAvailableBooks();
+        assertNotNull(availableBooks);
+    }
+
+    @Test
+    public void testCheckoutBook() {
+        List<Book> books = libraryController.getAvailableBooks();
+        Book rmBook = books.get(1);
+        libraryController.checkoutBook(1);
+        assertFalse(libraryController.getAvailableBooks().contains(rmBook));
+    }
+
+    @Test
+    public void testUnsuccessfulCheckoutBook() {
+        boolean result = libraryController.checkoutBook(100);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testCheckoutBookCommand() {
+        int bookIndex = 1;
+        int command = 2;
+        when(libraryView.readInt()).thenReturn(bookIndex);
+        libraryController = spy(libraryController);
+
+        libraryController.executeCommand(command);
+
+        verify(libraryController).checkoutBook(bookIndex);
+        verify(libraryView).showMessage("Please choose you book while writing the index:");
+        verify(libraryView).showMessage("Thank you! Enjoy the book");
+    }
+
+    @Test
+    public void testUnsuccessfullCheckoutBookCommand() {
+        when(libraryView.readInt()).thenReturn(100);
+        int command = 2;
+        libraryController.executeCommand(command);
+
+        verify(libraryView).showMessage("Please choose you book while writing the index:");
+        verify(libraryView).showMessage("That book is not available.");
+    }
+
+    @Test
+    public void testReturnBook() {
+        int bookIndex = 1;
+        Book book = libraryController.getAvailableBooks().get(bookIndex);
+        libraryController.checkoutBook(bookIndex);
+
+        boolean result = libraryController.returnBook(book);
+        assertTrue(result);
+        assertThat(libraryController.getAvailableBooks(), hasItem(book));
+    }
+
+    @Test
+    public void testUnsuccessfulReturnBook() {
+        Book book = null;
+        boolean result = libraryController.returnBook(book);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testReturnBookCommand() {
+        when(libraryView.readLine()).thenReturn("Head First Java");
+        int command = 3;
+        libraryController.executeCommand(command);
+
+        verify(libraryView).showMessage("Thank you for returning the book.");
+    }
+
+    @Test
+    public void testUnsuccessfulReturnBookCommand() {
+        when(libraryView.readLine()).thenReturn("Batman");
+        int command = 3;
+        libraryController.executeCommand(command);
+
+        verify(libraryView).showMessage("That is not a valid book to return.");
+    }
+
+    @Test
+    public void testCallMenu() {
+        libraryController = spy(libraryController);
+
+        libraryController.callMenu();
+
+        int command = 1;
+        when(libraryView.readInt()).thenReturn(command);
+
+        verify(libraryView).drawMenu(libraryController.getMenuItems());
+        verify(libraryView).readInt();
+        verify(libraryController).executeCommand(command);
+        verify(libraryController).callMenu();
+    }
+
+    @Test
+    public void testStart() {
+        libraryController = spy(libraryController);
+
+        libraryController.start();
+
+        verify(libraryView).showMessage("Hello user, welcome to the Bibliotheka App");
+        verify(libraryController).callMenu();
+
+    }
 
 
 

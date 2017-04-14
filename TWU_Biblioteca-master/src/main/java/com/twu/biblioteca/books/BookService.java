@@ -26,7 +26,7 @@ public class BookService {
         return getAllBooks().stream()
                 .filter(book -> book.getName().equals(name))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     public List<Book> getAvailableBooks() {
@@ -44,5 +44,7 @@ public class BookService {
         }
         return false;
     }
+
+
 
 }

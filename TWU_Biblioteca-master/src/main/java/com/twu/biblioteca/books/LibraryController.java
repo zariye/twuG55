@@ -8,11 +8,11 @@ import java.util.List;
  */
 public class LibraryController {
 
-    LibraryViewInterface view;
+    LibraryView view;
 
     BookService bookService;
 
-    public LibraryController(LibraryViewInterface libraryView) {
+    public LibraryController(LibraryView libraryView) {
         this.view = libraryView;
         this.bookService = new BookService();
     }
@@ -28,9 +28,70 @@ public class LibraryController {
                 break;
             }
             case 1: {
-                view.listBooks(bookService.getAvailableBooks());
+                listBooks();
                 break;
             }
+            case 2: {
+                view.showMessage("Please choose you book while writing the index:");
+                listBooks();
+                boolean result = checkoutBook(view.readInt());
+                if(result) {
+                    view.showMessage("Thank you! Enjoy the book");
+                } else {
+                    view.showMessage("That book is not available.");
+                }
+                break;
+            }
+            case 3 : {
+                Book book = bookService.getBookByName(view.readLine());
+                boolean result = this.returnBook(book);
+                if (result) {
+                    view.showMessage("Thank you for returning the book.");
+                } else {
+                    view.showMessage("That is not a valid book to return.");
+                }
+                break;
+            }
+            default: {
+                view.showMessage("Select a valid option!");
+            }
         }
+    }
+
+    private void listBooks() {
+        view.listBooks(bookService.getAvailableBooks());
+    }
+
+    public List<Book> getAvailableBooks() {
+        return this.bookService.getAvailableBooks();
+    }
+
+    public boolean checkoutBook(int bookIndex) {
+        if(this.bookService.getAvailableBooks().size() > bookIndex) {
+            this.bookService.checkoutBook(bookIndex);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean returnBook(Book book) {
+        if (book != null) {
+            this.bookService.returnBook(book);
+            return true;
+        }
+        return false;
+    }
+
+
+    public void callMenu() {
+        view.drawMenu(this.getMenuItems());
+        int command = view.readInt();
+        this.executeCommand(command);
+        this.callMenu();
+    }
+
+    public void start() {
+        view.showMessage("Hello user, welcome to the Bibliotheka App");
+        callMenu();
     }
 }

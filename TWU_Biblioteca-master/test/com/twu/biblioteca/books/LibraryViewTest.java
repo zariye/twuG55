@@ -45,7 +45,7 @@ public class LibraryViewTest {
 
     @Test
     public void testDrawMenu() {
-        bookView.drawMenu(new LibraryController(new LibraryViewMock()).getMenuItems());
+        bookView.drawMenu(new LibraryController(new LibraryView()).getMenuItems());
         assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n", systemOutRule.getLog());
     }
 
