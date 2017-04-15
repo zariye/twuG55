@@ -129,32 +129,6 @@ public class LibraryControllerTest {
         verify(libraryView).showMessage("That is not a valid book to return.");
     }
 
-    @Test
-    public void testCallMenu() {
-        libraryController = spy(libraryController);
-
-        libraryController.callMenu();
-
-        int command = 1;
-        when(libraryView.readInt()).thenReturn(command);
-
-        verify(libraryView).drawMenu(libraryController.getMenuItems());
-        verify(libraryView).readInt();
-        verify(libraryController).executeCommand(command);
-        verify(libraryController).callMenu();
-    }
-
-    @Test
-    public void testStart() {
-        libraryController = spy(libraryController);
-
-        libraryController.start();
-
-        verify(libraryView).showMessage("Hello user, welcome to the Bibliotheka App");
-        verify(libraryController).callMenu();
-
-    }
-
 
 
 }
