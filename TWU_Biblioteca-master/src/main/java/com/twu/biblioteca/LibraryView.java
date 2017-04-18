@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.books.Book;
+import com.twu.biblioteca.movie.Movie;
 
 import java.util.List;
 import java.util.Scanner;
@@ -35,5 +36,11 @@ public class LibraryView {
     public String readLine() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
+    }
+
+    public void listMovies(List<Movie> allMovies) {
+        for(Movie movie : allMovies) {
+            System.out.println("[" + allMovies.indexOf(movie) + "] " + movie.getName() + " | " + movie.getYear() + " | " + movie.getDirector() + " | " + movie.getRating());
+        }
     }
 }

@@ -1,9 +1,9 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.LibraryController;
-import com.twu.biblioteca.LibraryView;
 import com.twu.biblioteca.books.Book;
 import com.twu.biblioteca.books.BookService;
+import com.twu.biblioteca.movie.Movie;
+import com.twu.biblioteca.movie.MovieService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,11 +20,11 @@ import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emp
  */
 public class LibraryViewTest {
 
-    LibraryView bookView;
+    LibraryView libraryView;
 
     @Before
     public void setup() {
-        bookView = new LibraryView();
+        libraryView = new LibraryView();
     }
 
     @Rule
@@ -33,14 +33,14 @@ public class LibraryViewTest {
     @Test
     public void testShowMessage() {
         String message = "Hello user, welcome to the Bibliotheca App";
-        bookView.showMessage(message);
+        libraryView.showMessage(message);
         assertEquals(message + "\n", systemOutRule.getLog());
     }
 
     @Test
     public void testListBooks() {
         List<Book> books = new BookService().getAllBooks();
-        bookView.listBooks(books);
+        libraryView.listBooks(books);
 
         assertEquals("[0] Head First Java | 1940 | Moritz\n" +
                 "[1] Test Driven Development | 1901 | Jonathan\n" +
@@ -49,8 +49,16 @@ public class LibraryViewTest {
 
     @Test
     public void testDrawMenu() {
-        bookView.drawMenu(new LibraryController(new LibraryView()).getMenuItems());
-        assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n", systemOutRule.getLog());
+        libraryView.drawMenu(new LibraryController(new LibraryView()).getMenuItems());
+        assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n[4] list movies\n", systemOutRule.getLog());
+    }
+
+    @Test
+    public void testListMovies() {
+        List<Movie> allMovies = new MovieService().getAllMovies();
+        libraryView.listMovies(allMovies);
+
+        assertEquals("[0] batman | 2015 | robin | 7\n[1] jack | 2000 | bill | 1\n[2] theMovie | 2011 | ron | 9\n", systemOutRule.getLog());
     }
 
     @Rule
@@ -59,13 +67,13 @@ public class LibraryViewTest {
     @Test
     public void testReadInt() {
         systemInMock.provideLines("1337");
-        assertEquals(1337, bookView.readInt());
+        assertEquals(1337, libraryView.readInt());
     }
 
     @Test
     public void testReadLine() {
         String bookName = "History of the Awesome Kraut";
         systemInMock.provideLines(bookName);
-        assertEquals(bookName, bookView.readLine());
+        assertEquals(bookName, libraryView.readLine());
     }
 }

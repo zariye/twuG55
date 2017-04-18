@@ -2,6 +2,8 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.books.Book;
 import com.twu.biblioteca.books.BookService;
+import com.twu.biblioteca.movie.Movie;
+import com.twu.biblioteca.movie.MovieService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,13 +17,16 @@ public class LibraryController {
 
     BookService bookService;
 
+    MovieService movieService;
+
     public LibraryController(LibraryView libraryView) {
         this.view = libraryView;
         this.bookService = new BookService();
+        this.movieService = new MovieService();
     }
 
     public List<String> getMenuItems() {
-        return Arrays.asList("[0] quit", "[1] list books", "[2] checkout", "[3] return book");
+        return Arrays.asList("[0] quit", "[1] list books", "[2] checkout", "[3] return book", "[4] list movies");
     }
 
     public void executeCommand(int command) {
@@ -53,6 +58,10 @@ public class LibraryController {
                 } else {
                     view.showMessage("That is not a valid book to return.");
                 }
+                break;
+            }
+            case 4: {
+                view.listMovies(movieService.getAllMovies());
                 break;
             }
             default: {
@@ -96,5 +105,9 @@ public class LibraryController {
     public void start() {
         view.showMessage("Hello user, welcome to the Bibliotheka App");
         callMenu();
+    }
+
+    public List<Movie> getAvailableMovies() {
+        return this.movieService.getAvailableMovies();
     }
 }

@@ -36,6 +36,8 @@ public class LibraryControllerTest {
         assertThat(menuItems, hasItem("[1] list books"));
         assertThat(menuItems, hasItem("[2] checkout"));
         assertThat(menuItems, hasItem("[3] return book"));
+        assertThat(menuItems, hasItem("[4] list movies"));
+
     }
 
     @Rule
@@ -126,6 +128,14 @@ public class LibraryControllerTest {
         libraryController.executeCommand(command);
 
         verify(libraryView).showMessage("That is not a valid book to return.");
+    }
+
+    @Test
+    public void testListMoviesCommand() {
+        int command = 4;
+        libraryController.executeCommand(command);
+        verify(libraryView).listMovies(libraryController.getAvailableMovies());
+
     }
 
 

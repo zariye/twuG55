@@ -30,4 +30,9 @@ public class MovieService {
         }
         return availableMovies;
     }
+
+
+    public void checkoutMovie(int index) {
+        this.getAvailableMovies().get(index).setAvailable(false);
+    }
 }

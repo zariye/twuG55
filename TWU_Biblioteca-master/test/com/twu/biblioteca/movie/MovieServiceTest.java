@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -24,13 +26,22 @@ public class MovieServiceTest {
     @Test
     public void testGetAllMovies() {
         List<Movie> allMovies = movieService.getAllMovies();
-        assertThat(allMovies, CoreMatchers.hasItem(new Movie("batman", 2015, "robin", 7)));
+        assertThat(allMovies, hasItem(new Movie("batman", 2015, "robin", 7)));
     }
 
     @Test
     public void testGetAvailableMovies() {
         List<Movie> availableMovies = movieService.getAvailableMovies();
         assertTrue(availableMovies.get(0).isAvailable());
+    }
+
+    @Test
+    public void testCheckoutMovie() {
+        int index = 1;
+        Movie movie = movieService.getAvailableMovies().get(index);
+        movieService.checkoutMovie(index);
+
+        assertThat(movieService.getAvailableMovies(), not(hasItem(movie)));
     }
 
 }
