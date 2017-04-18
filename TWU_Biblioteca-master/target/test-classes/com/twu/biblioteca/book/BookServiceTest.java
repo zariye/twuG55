@@ -23,26 +23,26 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookByNameTest() {
+    public void testGetBookByName() {
         Book headFirstJava = new Book("Head First Java", "1940", "Moritz");
         Book foundBook = bookService.getBookByName(headFirstJava.getName());
         assertEquals(headFirstJava, foundBook);
     }
 
     @Test
-    public void getAllBooksTest() {
+    public void testGetAllBooks() {
         List<Book> allBooks = bookService.getAllBooks();
         assertThat(allBooks, CoreMatchers.hasItem(new Book("Head First Java", "1940", "Moritz")));
     }
 
     @Test
-    public void getAvailableBooksTest() {
+    public void testGetAvailableBooks() {
         List<Book> availableBooks = bookService.getAvailableBooks();
         assertNotNull(availableBooks);
     }
 
     @Test
-    public void checkoutBookTest() {
+    public void testCheckoutBook() {
         int index = 1;
         Book bookToCheckout = bookService.getAllBooks().get(index);
         bookService.checkoutBook(index);
