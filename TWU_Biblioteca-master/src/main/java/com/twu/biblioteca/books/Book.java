@@ -40,21 +40,4 @@ public class Book {
               && this.getAuthor().equals(newBook.getAuthor());
     }
 
-    public static Book getBookByName(String batman, List<Book> bookList) {
-        for(Book book : bookList) {
-            if (book.getName().equals(batman)) {
-                return book;
-            }
-        }
-
-        return null;
-    }
-
-    public static List<Book> createBooksList() {
-        List<Book> booksList = new ArrayList<Book>();
-        booksList.add(new Book("Head First Java", "1940", "Moritz"));
-        booksList.add(new Book("Test Driven Development", "1901", "Jonathan"));
-        booksList.add(new Book("History of the Awesome Kraut", "1200","Zara"));
-        return booksList;
-    }
 }

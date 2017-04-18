@@ -1,6 +1,8 @@
-package com.twu.biblioteca.books;
+package com.twu.biblioteca;
 
-import org.hamcrest.CoreMatchers;
+import com.twu.biblioteca.LibraryController;
+import com.twu.biblioteca.LibraryView;
+import com.twu.biblioteca.books.Book;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
