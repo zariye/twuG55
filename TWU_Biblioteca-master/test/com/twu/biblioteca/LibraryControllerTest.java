@@ -1,7 +1,5 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.LibraryController;
-import com.twu.biblioteca.LibraryView;
 import com.twu.biblioteca.books.Book;
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,7 +11,6 @@ import org.mockito.junit.MockitoRule;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
