@@ -4,6 +4,7 @@ import com.twu.biblioteca.books.Book;
 import com.twu.biblioteca.books.BookService;
 import com.twu.biblioteca.movie.Movie;
 import com.twu.biblioteca.movie.MovieService;
+import com.twu.biblioteca.user.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +20,10 @@ public class LibraryController {
 
     MovieService movieService;
 
-    public LibraryController(LibraryView libraryView) {
+    public LibraryController(LibraryView libraryView, MovieService movieService) {
         this.view = libraryView;
         this.bookService = new BookService();
-        this.movieService = new MovieService();
+        this.movieService = movieService;
     }
 
     public List<String> getMenuItems() {
@@ -66,7 +67,7 @@ public class LibraryController {
             }
             case 5: {
                 int movieIndex = view.readInt();
-                this.checkoutMovie(movieIndex);
+                movieService.tryToCheckoutMovie(movieIndex);
                 view.showMessage("Thank you! Enjoy the movie.");
                 break;
             }
@@ -117,7 +118,7 @@ public class LibraryController {
         return this.movieService.getAvailableMovies();
     }
 
-    public void checkoutMovie(int index) {
-        this.movieService.checkoutMovie(index);
+    public User verifyLogin() {
+        return new User("000-0", "");
     }
 }

@@ -1,7 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.books.Book;
-import com.twu.biblioteca.movie.Movie;
+import com.twu.biblioteca.movie.MovieService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,11 +24,14 @@ public class LibraryControllerTest {
     LibraryController libraryController;
 
     @Mock
-    LibraryView libraryView;
+    LibraryView libraryViewMock;
+
+    @Mock
+    MovieService movieServiceMock;
 
     @Before
     public void setup() {
-        libraryController = new LibraryController(libraryView);
+        libraryController = new LibraryController(libraryViewMock, movieServiceMock);
     }
 
     @Test
@@ -50,7 +53,7 @@ public class LibraryControllerTest {
     public void testListBooksCommand() {
         int command = 1;
         libraryController.executeCommand(command);
-        verify(libraryView).listBooks(libraryController.getAvailableBooks());
+        verify(libraryViewMock).listBooks(libraryController.getAvailableBooks());
     }
 
     @Test
@@ -77,24 +80,24 @@ public class LibraryControllerTest {
     public void testCheckoutBookCommand() {
         int bookIndex = 1;
         int command = 2;
-        when(libraryView.readInt()).thenReturn(bookIndex);
+        when(libraryViewMock.readInt()).thenReturn(bookIndex);
         libraryController = spy(libraryController);
 
         libraryController.executeCommand(command);
 
         verify(libraryController).checkoutBook(bookIndex);
-        verify(libraryView).showMessage("Please choose you book while writing the index:");
-        verify(libraryView).showMessage("Thank you! Enjoy the book");
+        verify(libraryViewMock).showMessage("Please choose you book while writing the index:");
+        verify(libraryViewMock).showMessage("Thank you! Enjoy the book");
     }
 
     @Test
     public void testUnsuccessfullCheckoutBookCommand() {
-        when(libraryView.readInt()).thenReturn(100);
+        when(libraryViewMock.readInt()).thenReturn(100);
         int command = 2;
         libraryController.executeCommand(command);
 
-        verify(libraryView).showMessage("Please choose you book while writing the index:");
-        verify(libraryView).showMessage("That book is not available.");
+        verify(libraryViewMock).showMessage("Please choose you book while writing the index:");
+        verify(libraryViewMock).showMessage("That book is not available.");
     }
 
     @Test
@@ -117,51 +120,48 @@ public class LibraryControllerTest {
 
     @Test
     public void testReturnBookCommand() {
-        when(libraryView.readLine()).thenReturn("Head First Java");
+        when(libraryViewMock.readLine()).thenReturn("Head First Java");
         int command = 3;
         libraryController.executeCommand(command);
 
-        verify(libraryView).showMessage("Thank you for returning the book.");
+        verify(libraryViewMock).showMessage("Thank you for returning the book.");
     }
 
     @Test
     public void testUnsuccessfulReturnBookCommand() {
-        when(libraryView.readLine()).thenReturn("Batman");
+        when(libraryViewMock.readLine()).thenReturn("Batman");
         int command = 3;
         libraryController.executeCommand(command);
 
-        verify(libraryView).showMessage("That is not a valid book to return.");
+        verify(libraryViewMock).showMessage("That is not a valid book to return.");
     }
 
     @Test
     public void testListMoviesCommand() {
         int command = 4;
         libraryController.executeCommand(command);
-        verify(libraryView).listMovies(libraryController.getAvailableMovies());
-    }
-
-    @Test
-    public void testCheckoutMovie() {
-        int index = 1;
-        Movie movie = libraryController.getAvailableMovies().get(index);
-        libraryController.checkoutMovie(index);
-
-        assertThat(libraryController.getAvailableMovies(), not(hasItem(movie)));
+        verify(libraryViewMock).listMovies(libraryController.getAvailableMovies());
     }
 
     @Test
     public void testCheckoutMovieCommand() {
         int command = 5;
         int movieIndex = 1;
-        when(libraryView.readInt()).thenReturn(movieIndex);
+        when(libraryViewMock.readInt()).thenReturn(movieIndex);
         libraryController = spy(libraryController);
 
 
         libraryController.executeCommand(command);
-        verify(libraryController).checkoutMovie(movieIndex);
-        verify(libraryView).showMessage("Thank you! Enjoy the movie.");
+        verify(movieServiceMock).tryToCheckoutMovie(movieIndex);
+        verify(libraryViewMock).showMessage("Thank you! Enjoy the movie.");
     }
 
+    @Test
+    public void testIsUserLoggedIn() {
+
+        // TODO continue here =)
+        assertNotNull(libraryController.verifyLogin());
+    }
 
 
 }

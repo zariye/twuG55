@@ -32,7 +32,11 @@ public class MovieService {
     }
 
 
-    public void checkoutMovie(int index) {
-        this.getAvailableMovies().get(index).setAvailable(false);
+    public boolean tryToCheckoutMovie(int index) {
+        if (index >= 0 && index < getAvailableMovies().size()) {
+            this.getAvailableMovies().get(index).setAvailable(false);
+            return true;
+        }
+        return false;
     }
 }

@@ -1,6 +1,5 @@
 package com.twu.biblioteca.movie;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +7,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -39,9 +39,18 @@ public class MovieServiceTest {
     public void testCheckoutMovie() {
         int index = 1;
         Movie movie = movieService.getAvailableMovies().get(index);
-        movieService.checkoutMovie(index);
+        assertTrue(movieService.tryToCheckoutMovie(index));
 
         assertThat(movieService.getAvailableMovies(), not(hasItem(movie)));
     }
+
+    @Test
+    public void testTryToCheckoutMovieWithWrongIndex() {
+      int index = 80;
+
+      assertFalse(movieService.tryToCheckoutMovie(index));
+    }
+
+
 
 }
