@@ -26,7 +26,7 @@ public class LibraryController {
     }
 
     public List<String> getMenuItems() {
-        return Arrays.asList("[0] quit", "[1] list books", "[2] checkout", "[3] return book", "[4] list movies");
+        return Arrays.asList("[0] quit", "[1] list books", "[2] checkout", "[3] return book", "[4] list movies", "[5] checkout movie");
     }
 
     public void executeCommand(int command) {
@@ -61,7 +61,13 @@ public class LibraryController {
                 break;
             }
             case 4: {
-                view.listMovies(movieService.getAllMovies());
+                view.listMovies(movieService.getAvailableMovies());
+                break;
+            }
+            case 5: {
+                int movieIndex = view.readInt();
+                this.checkoutMovie(movieIndex);
+                view.showMessage("Thank you! Enjoy the movie.");
                 break;
             }
             default: {
@@ -109,5 +115,9 @@ public class LibraryController {
 
     public List<Movie> getAvailableMovies() {
         return this.movieService.getAvailableMovies();
+    }
+
+    public void checkoutMovie(int index) {
+        this.movieService.checkoutMovie(index);
     }
 }

@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.books.Book;
+import com.twu.biblioteca.movie.Movie;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.mockito.junit.MockitoRule;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -37,6 +39,7 @@ public class LibraryControllerTest {
         assertThat(menuItems, hasItem("[2] checkout"));
         assertThat(menuItems, hasItem("[3] return book"));
         assertThat(menuItems, hasItem("[4] list movies"));
+        assertThat(menuItems, hasItem("[5] checkout movie"));
 
     }
 
@@ -135,7 +138,28 @@ public class LibraryControllerTest {
         int command = 4;
         libraryController.executeCommand(command);
         verify(libraryView).listMovies(libraryController.getAvailableMovies());
+    }
 
+    @Test
+    public void testCheckoutMovie() {
+        int index = 1;
+        Movie movie = libraryController.getAvailableMovies().get(index);
+        libraryController.checkoutMovie(index);
+
+        assertThat(libraryController.getAvailableMovies(), not(hasItem(movie)));
+    }
+
+    @Test
+    public void testCheckoutMovieCommand() {
+        int command = 5;
+        int movieIndex = 1;
+        when(libraryView.readInt()).thenReturn(movieIndex);
+        libraryController = spy(libraryController);
+
+
+        libraryController.executeCommand(command);
+        verify(libraryController).checkoutMovie(movieIndex);
+        verify(libraryView).showMessage("Thank you! Enjoy the movie.");
     }
 
 

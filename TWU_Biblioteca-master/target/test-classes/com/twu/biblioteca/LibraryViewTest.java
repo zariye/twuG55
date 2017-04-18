@@ -50,7 +50,7 @@ public class LibraryViewTest {
     @Test
     public void testDrawMenu() {
         libraryView.drawMenu(new LibraryController(new LibraryView()).getMenuItems());
-        assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n[4] list movies\n", systemOutRule.getLog());
+        assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n[4] list movies\n[5] checkout movie\n", systemOutRule.getLog());
     }
 
     @Test
