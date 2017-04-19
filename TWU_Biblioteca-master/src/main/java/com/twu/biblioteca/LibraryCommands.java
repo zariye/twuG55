@@ -11,5 +11,6 @@ public class LibraryCommands {
     public static final int COMMAND_RETURN_BOOK = 3;
     public static final int COMMAND_LIST_MOVIES = 4;
     public static final int COMMAND_CHECKOUT_MOVIE = 5;
+    public static final int COMMAND_USER_INFO = 6;
 
 }

@@ -12,8 +12,8 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 
+import static com.twu.biblioteca.LibraryCommands.*;
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -47,6 +47,7 @@ public class LibraryControllerTest {
         assertThat(menuItems, hasItem("[3] return book"));
         assertThat(menuItems, hasItem("[4] list movies"));
         assertThat(menuItems, hasItem("[5] checkout movie"));
+        assertThat(menuItems, hasItem("[6] user info"));
 
     }
 
@@ -55,8 +56,7 @@ public class LibraryControllerTest {
 
     @Test
     public void testListBooksCommand() {
-        int command = 1;
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_LIST_BOOKS);
         verify(libraryViewMock).listBooks(libraryController.getAvailableBooks());
     }
 
@@ -83,13 +83,12 @@ public class LibraryControllerTest {
     @Test
     public void testCheckoutBookCommand() {
         int bookIndex = 1;
-        int command = 2;
         when(libraryViewMock.readInt()).thenReturn(bookIndex);
         when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
 
         libraryController = spy(libraryController);
 
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_CHECKOUT_BOOK);
 
         verify(libraryController).checkoutBook(bookIndex);
         verify(libraryViewMock).showMessage("Please choose you book while writing the index:");
@@ -101,8 +100,7 @@ public class LibraryControllerTest {
         when(libraryViewMock.readInt()).thenReturn(100);
         when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
 
-        int command = 2;
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_CHECKOUT_BOOK);
 
         verify(libraryViewMock).showMessage("Please choose you book while writing the index:");
         verify(libraryViewMock).showMessage("That book is not available.");
@@ -130,8 +128,7 @@ public class LibraryControllerTest {
     public void testReturnBookCommand() {
         when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd").thenReturn("Head First Java");
 
-        int command = 3;
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_RETURN_BOOK);
 
         verify(libraryViewMock).showMessage("Thank you for returning the book.");
     }
@@ -141,22 +138,19 @@ public class LibraryControllerTest {
         when(libraryViewMock.readLine()).thenReturn("Batman");
         when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
 
-        int command = 3;
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_RETURN_BOOK);
 
         verify(libraryViewMock).showMessage("That is not a valid book to return.");
     }
 
     @Test
     public void testListMoviesCommand() {
-        int command = 4;
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_LIST_MOVIES);
         verify(libraryViewMock).listMovies(libraryController.getAvailableMovies());
     }
 
     @Test
     public void testCheckoutMovieCommand() {
-        int command = 5;
         int movieIndex = 1;
         when(libraryViewMock.readInt()).thenReturn(movieIndex);
         when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
@@ -164,7 +158,7 @@ public class LibraryControllerTest {
         libraryController = spy(libraryController);
 
 
-        libraryController.executeCommand(command);
+        libraryController.executeCommand(COMMAND_CHECKOUT_MOVIE);
         verify(movieServiceMock).tryToCheckoutMovie(movieIndex);
         verify(libraryViewMock).showMessage("Thank you! Enjoy the movie.");
     }
@@ -182,7 +176,6 @@ public class LibraryControllerTest {
     }
 
     private void checkLogin(int command) {
-
         LibraryController libraryControllerSpy = spy(libraryController);
 
         libraryControllerSpy.executeCommand(command);
@@ -198,37 +191,55 @@ public class LibraryControllerTest {
 
     @Test
     public void testLoginBeforeCheckoutBook() {
-        checkLogin(2);
+        checkLogin(COMMAND_CHECKOUT_BOOK);
     }
 
     @Test
     public void testLoginBeforeReturnBook() {
-        checkLogin(3);
+        checkLogin(COMMAND_RETURN_BOOK);
+    }
+
+    @Test
+    public void testLoginBeforeUserInfo() {
+        checkLogin(COMMAND_USER_INFO);
     }
 
     @Test
     public void testLoginBeforeCheckoutMovie() {
-        checkLogin(5);
+        checkLogin(COMMAND_CHECKOUT_MOVIE);
     }
 
     @Test
     public void unsuccessfulLoginShouldDoNothingForCheckoutBook(){
         int bookIndex = 1;
-        LibraryController libraryControllerSpy = setUpUnsuccessfulLogin(2);
+        LibraryController libraryControllerSpy = setUpUnsuccessfulLogin(COMMAND_CHECKOUT_BOOK);
         verify(libraryControllerSpy, never()).checkoutBook(bookIndex);
     }
 
     @Test
     public void unsuccessfulLoginShouldDoNothingForReturnBook(){
-        LibraryController libraryControllerSpy = setUpUnsuccessfulLogin(3);
+        LibraryController libraryControllerSpy = setUpUnsuccessfulLogin(COMMAND_RETURN_BOOK);
         verify(libraryControllerSpy, never()).returnBook(null);
     }
 
     @Test
     public void unsuccessfulLoginShouldDoNothingForCheckoutMovie(){
-        libraryController.executeCommand(5);
+        libraryController.executeCommand(COMMAND_CHECKOUT_MOVIE);
         verify(movieServiceMock, never()).tryToCheckoutMovie(0);
     }
 
+    @Test
+    public void testDoesNotShowUserInfoWhenNotLoggedIn() {
+        userService.login("000-0003", "lala");
+        libraryController.executeCommand(COMMAND_USER_INFO);
+        verify(libraryViewMock).showMessage("hans: user@info, 004917689");
+    }
+
+    @Test
+    public void testOnlyAskForLoginIfNotLoggedIn() {
+        userService.login("000-0001", "abcd");
+        libraryController.executeCommand(COMMAND_USER_INFO);
+        verify(libraryViewMock, never()).showMessage("Input your library number please");
+    }
 
 }

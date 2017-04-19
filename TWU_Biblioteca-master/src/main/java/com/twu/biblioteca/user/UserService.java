@@ -48,4 +48,9 @@ public class UserService {
   public User getCurrentUser() {
     return currentUser;
   }
+
+  public String getUserInfo() {
+    return currentUser != null ? currentUser.getName() + ": " + currentUser.getEmail() + ", " + currentUser.getNumber() : null;
+
+  }
 }

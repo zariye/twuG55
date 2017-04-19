@@ -25,6 +25,7 @@ public class UserServiceTest {
   }
 
   @Test
+
   public void testLogin() {
     User user = userService.getUserById("000-0004");
 
@@ -34,5 +35,11 @@ public class UserServiceTest {
     assertEquals(user, userService.getCurrentUser());
 
     assertTrue(user.isLoggedIn());
+  }
+
+  @Test
+  public void testShowUserInfo() {
+    userService.login("000-0003", "lala");
+    assertEquals("hans: user@info, 004917689", userService.getUserInfo());
   }
 }

@@ -33,7 +33,7 @@ public class LibraryController {
     }
 
     public List<String> getMenuItems() {
-        return Arrays.asList("[0] quit", "[1] list books", "[2] checkout", "[3] return book", "[4] list movies", "[5] checkout movie");
+        return Arrays.asList("[0] quit", "[1] list books", "[2] checkout", "[3] return book", "[4] list movies", "[5] checkout movie", "[6] user info");
     }
 
     public void executeCommand(int command) {
@@ -60,6 +60,12 @@ public class LibraryController {
             }
             case COMMAND_CHECKOUT_MOVIE: {
                 checkoutMovieCommand();
+                break;
+            }
+            case COMMAND_USER_INFO: {
+                if (verifyLogin() != null) {
+                    view.showMessage(userService.getUserInfo());
+                }
                 break;
             }
             default: {
@@ -147,11 +153,13 @@ public class LibraryController {
     }
 
     public User verifyLogin() {
-        view.showMessage("Input your library number please");
-        String ID = view.readLine();
-        view.showMessage("Input your password please");
-        String password = view.readLine();
-        userService.login(ID, password);
+        if (userService.getCurrentUser() == null) {
+            view.showMessage("Input your library number please");
+            String ID = view.readLine();
+            view.showMessage("Input your password please");
+            String password = view.readLine();
+            userService.login(ID, password);
+        }
         return userService.getCurrentUser();
     }
 }

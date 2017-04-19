@@ -7,22 +7,37 @@ import java.util.Objects;
  */
 public class User {
 
-  public String getID() {
-    return ID;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
   private String ID;
   private String password;
   private boolean loggedIn;
+  private String name;
+
+  public String getName() {
+    return name;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public String getNumber() {
+    return number;
+  }
+
+  private String email;
+  private String number;
 
   public User(String ID, String password) {
+    this(ID, password, false, "hans", "user@info", "004917689");
+  }
+
+  public User(String ID, String password, boolean loggedIn, String name, String email, String number) {
     this.ID = ID;
     this.password = password;
-    this.loggedIn = false;
+    this.loggedIn = loggedIn;
+    this.name = name;
+    this.email = email;
+    this.number = number;
   }
 
   @Override
@@ -39,4 +54,13 @@ public class User {
   public void setLoggedIn(boolean loggedIn) {
     this.loggedIn = loggedIn;
   }
+
+  public String getID() {
+    return ID;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
 }
