@@ -10,6 +10,8 @@ import com.twu.biblioteca.user.UserService;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.twu.biblioteca.LibraryCommands.*;
+
 /**
  * Created by buzzer on 13.04.17.
  */
@@ -36,46 +38,28 @@ public class LibraryController {
 
     public void executeCommand(int command) {
         switch(command) {
-            case 0: {
+            case COMMAND_QUIT: {
                 System.exit(0);
                 break;
             }
-            case 1: {
+            case COMMAND_LIST_BOOKS: {
                 listBooks();
                 break;
             }
-            case 2: {
-                verifyLogin();
-                view.showMessage("Please choose you book while writing the index:");
-                listBooks();
-                boolean result = checkoutBook(view.readInt());
-                if(result) {
-                    view.showMessage("Thank you! Enjoy the book");
-                } else {
-                    view.showMessage("That book is not available.");
-                }
+            case COMMAND_CHECKOUT_BOOK: {
+                checkoutBookCommand();
                 break;
             }
-            case 3 : {
-                verifyLogin();
-                Book book = bookService.getBookByName(view.readLine());
-                boolean result = this.returnBook(book);
-                if (result) {
-                    view.showMessage("Thank you for returning the book.");
-                } else {
-                    view.showMessage("That is not a valid book to return.");
-                }
+            case COMMAND_RETURN_BOOK : {
+                returnBookCommand();
                 break;
             }
-            case 4: {
+            case COMMAND_LIST_MOVIES: {
                 view.listMovies(movieService.getAvailableMovies());
                 break;
             }
-            case 5: {
-                verifyLogin();
-                int movieIndex = view.readInt();
-                movieService.tryToCheckoutMovie(movieIndex);
-                view.showMessage("Thank you! Enjoy the movie.");
+            case COMMAND_CHECKOUT_MOVIE: {
+                checkoutMovieCommand();
                 break;
             }
             default: {
@@ -83,6 +67,43 @@ public class LibraryController {
             }
         }
     }
+
+    private void checkoutMovieCommand() {
+        User currentUser = verifyLogin();
+        if(currentUser != null) {
+            int movieIndex = view.readInt();
+            movieService.tryToCheckoutMovie(movieIndex);
+            view.showMessage("Thank you! Enjoy the movie.");
+        }
+    }
+
+    private void returnBookCommand() {
+        User currentUser = verifyLogin();
+        if(currentUser != null) {
+            Book book = bookService.getBookByName(view.readLine());
+            boolean result = this.returnBook(book);
+            if (result) {
+                view.showMessage("Thank you for returning the book.");
+            } else {
+                view.showMessage("That is not a valid book to return.");
+            }
+        }
+    }
+
+    private void checkoutBookCommand() {
+        User currentUser = verifyLogin();
+        if(currentUser != null) {
+            view.showMessage("Please choose you book while writing the index:");
+            listBooks();
+            boolean result = checkoutBook(view.readInt());
+            if(result) {
+                view.showMessage("Thank you! Enjoy the book");
+            } else {
+                view.showMessage("That book is not available.");
+            }
+        }
+    }
+
 
     private void listBooks() {
         view.listBooks(bookService.getAvailableBooks());

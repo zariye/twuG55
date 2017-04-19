@@ -85,6 +85,8 @@ public class LibraryControllerTest {
         int bookIndex = 1;
         int command = 2;
         when(libraryViewMock.readInt()).thenReturn(bookIndex);
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
+
         libraryController = spy(libraryController);
 
         libraryController.executeCommand(command);
@@ -97,6 +99,8 @@ public class LibraryControllerTest {
     @Test
     public void testUnsuccessfullCheckoutBookCommand() {
         when(libraryViewMock.readInt()).thenReturn(100);
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
+
         int command = 2;
         libraryController.executeCommand(command);
 
@@ -124,7 +128,8 @@ public class LibraryControllerTest {
 
     @Test
     public void testReturnBookCommand() {
-        when(libraryViewMock.readLine()).thenReturn("Head First Java");
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd").thenReturn("Head First Java");
+
         int command = 3;
         libraryController.executeCommand(command);
 
@@ -134,6 +139,8 @@ public class LibraryControllerTest {
     @Test
     public void testUnsuccessfulReturnBookCommand() {
         when(libraryViewMock.readLine()).thenReturn("Batman");
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
+
         int command = 3;
         libraryController.executeCommand(command);
 
@@ -152,6 +159,8 @@ public class LibraryControllerTest {
         int command = 5;
         int movieIndex = 1;
         when(libraryViewMock.readInt()).thenReturn(movieIndex);
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
+
         libraryController = spy(libraryController);
 
 
@@ -172,45 +181,54 @@ public class LibraryControllerTest {
         assertNull(libraryController.verifyLogin());
     }
 
-    @Test
-    public void testLoginBeforeCheckoutBook() {
-        int command = 2;
-        int bookIndex = 1;
+    private void checkLogin(int command) {
 
-        when(libraryViewMock.readInt()).thenReturn(bookIndex);
         LibraryController libraryControllerSpy = spy(libraryController);
 
         libraryControllerSpy.executeCommand(command);
         verify(libraryControllerSpy).verifyLogin();
+    }
 
+    private LibraryController setUpUnsuccessfulLogin(int command) {
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("blob");
+        LibraryController libraryControllerSpy = spy(libraryController);
+        libraryControllerSpy.executeCommand(command);
+        return libraryControllerSpy;
+    }
+
+    @Test
+    public void testLoginBeforeCheckoutBook() {
+        checkLogin(2);
     }
 
     @Test
     public void testLoginBeforeReturnBook() {
-        int command = 3;
-        int bookIndex = 1;
-
-        when(libraryViewMock.readInt()).thenReturn(bookIndex);
-        LibraryController libraryControllerSpy = spy(libraryController);
-
-        libraryControllerSpy.executeCommand(command);
-        verify(libraryControllerSpy).verifyLogin();
-
+        checkLogin(3);
     }
 
     @Test
     public void testLoginBeforeCheckoutMovie() {
-        int command = 5;
-        int movieIndex = 1;
-
-        when(libraryViewMock.readInt()).thenReturn(movieIndex);
-        LibraryController libraryControllerSpy = spy(libraryController);
-
-        libraryControllerSpy.executeCommand(command);
-        verify(libraryControllerSpy).verifyLogin();
-
+        checkLogin(5);
     }
 
+    @Test
+    public void unsuccessfulLoginShouldDoNothingForCheckoutBook(){
+        int bookIndex = 1;
+        LibraryController libraryControllerSpy = setUpUnsuccessfulLogin(2);
+        verify(libraryControllerSpy, never()).checkoutBook(bookIndex);
+    }
+
+    @Test
+    public void unsuccessfulLoginShouldDoNothingForReturnBook(){
+        LibraryController libraryControllerSpy = setUpUnsuccessfulLogin(3);
+        verify(libraryControllerSpy, never()).returnBook(null);
+    }
+
+    @Test
+    public void unsuccessfulLoginShouldDoNothingForCheckoutMovie(){
+        libraryController.executeCommand(5);
+        verify(movieServiceMock, never()).tryToCheckoutMovie(0);
+    }
 
 
 }
