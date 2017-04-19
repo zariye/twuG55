@@ -2,6 +2,7 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.books.Book;
 import com.twu.biblioteca.movie.MovieService;
+import com.twu.biblioteca.user.UserService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,9 +30,12 @@ public class LibraryControllerTest {
     @Mock
     MovieService movieServiceMock;
 
+    UserService userService;
+
     @Before
     public void setup() {
-        libraryController = new LibraryController(libraryViewMock, movieServiceMock);
+        userService = new UserService();
+        libraryController = new LibraryController(libraryViewMock, movieServiceMock, userService);
     }
 
     @Test
@@ -158,10 +162,55 @@ public class LibraryControllerTest {
 
     @Test
     public void testIsUserLoggedIn() {
-
-        // TODO continue here =)
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("abcd");
         assertNotNull(libraryController.verifyLogin());
     }
+
+    @Test
+    public void testlogINUserWIthWrongCredentials() {
+        when(libraryViewMock.readLine()).thenReturn("000-0001").thenReturn("blob");
+        assertNull(libraryController.verifyLogin());
+    }
+
+    @Test
+    public void testLoginBeforeCheckoutBook() {
+        int command = 2;
+        int bookIndex = 1;
+
+        when(libraryViewMock.readInt()).thenReturn(bookIndex);
+        LibraryController libraryControllerSpy = spy(libraryController);
+
+        libraryControllerSpy.executeCommand(command);
+        verify(libraryControllerSpy).verifyLogin();
+
+    }
+
+    @Test
+    public void testLoginBeforeReturnBook() {
+        int command = 3;
+        int bookIndex = 1;
+
+        when(libraryViewMock.readInt()).thenReturn(bookIndex);
+        LibraryController libraryControllerSpy = spy(libraryController);
+
+        libraryControllerSpy.executeCommand(command);
+        verify(libraryControllerSpy).verifyLogin();
+
+    }
+
+    @Test
+    public void testLoginBeforeCheckoutMovie() {
+        int command = 5;
+        int movieIndex = 1;
+
+        when(libraryViewMock.readInt()).thenReturn(movieIndex);
+        LibraryController libraryControllerSpy = spy(libraryController);
+
+        libraryControllerSpy.executeCommand(command);
+        verify(libraryControllerSpy).verifyLogin();
+
+    }
+
 
 
 }

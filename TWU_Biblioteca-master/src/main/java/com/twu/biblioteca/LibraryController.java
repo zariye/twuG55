@@ -5,6 +5,7 @@ import com.twu.biblioteca.books.BookService;
 import com.twu.biblioteca.movie.Movie;
 import com.twu.biblioteca.movie.MovieService;
 import com.twu.biblioteca.user.User;
+import com.twu.biblioteca.user.UserService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,10 +21,13 @@ public class LibraryController {
 
     MovieService movieService;
 
-    public LibraryController(LibraryView libraryView, MovieService movieService) {
+    UserService userService;
+
+    public LibraryController(LibraryView libraryView, MovieService movieService, UserService userService) {
         this.view = libraryView;
         this.bookService = new BookService();
         this.movieService = movieService;
+        this.userService = userService;
     }
 
     public List<String> getMenuItems() {
@@ -41,6 +45,7 @@ public class LibraryController {
                 break;
             }
             case 2: {
+                verifyLogin();
                 view.showMessage("Please choose you book while writing the index:");
                 listBooks();
                 boolean result = checkoutBook(view.readInt());
@@ -52,6 +57,7 @@ public class LibraryController {
                 break;
             }
             case 3 : {
+                verifyLogin();
                 Book book = bookService.getBookByName(view.readLine());
                 boolean result = this.returnBook(book);
                 if (result) {
@@ -66,6 +72,7 @@ public class LibraryController {
                 break;
             }
             case 5: {
+                verifyLogin();
                 int movieIndex = view.readInt();
                 movieService.tryToCheckoutMovie(movieIndex);
                 view.showMessage("Thank you! Enjoy the movie.");
@@ -119,6 +126,11 @@ public class LibraryController {
     }
 
     public User verifyLogin() {
-        return new User("000-0", "");
+        view.showMessage("Input your library number please");
+        String ID = view.readLine();
+        view.showMessage("Input your password please");
+        String password = view.readLine();
+        userService.login(ID, password);
+        return userService.getCurrentUser();
     }
 }

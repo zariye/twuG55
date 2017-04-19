@@ -4,6 +4,7 @@ import com.twu.biblioteca.books.Book;
 import com.twu.biblioteca.books.BookService;
 import com.twu.biblioteca.movie.Movie;
 import com.twu.biblioteca.movie.MovieService;
+import com.twu.biblioteca.user.UserService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class LibraryViewTest {
 
     @Test
     public void testDrawMenu() {
-        libraryView.drawMenu(new LibraryController(new LibraryView(), new MovieService()).getMenuItems());
+        libraryView.drawMenu(new LibraryController(new LibraryView(), new MovieService(), new UserService()).getMenuItems());
         assertEquals("[0] quit\n[1] list books\n[2] checkout\n[3] return book\n[4] list movies\n[5] checkout movie\n", systemOutRule.getLog());
     }
 
